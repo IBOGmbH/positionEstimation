@@ -3,10 +3,18 @@ import numpy as np
 import cv2
 import cv2.aruco as aruco
 import glob
+from picamera.array import PiRGBArray
+from picamera import PiCamera
+import time
 
-#cap = cv2.VideoCapture(1)
+#cap = cv2.VideoCapture(0)
+camera =PiCamera()
+camera.resolution=(640,480)
+camera.framerate = 5
+rawCapture = PiRGBArray(camera, size=(640,480))
+time.sleep(0.1)
 
-frame = cv2.imread("a.jpg")
+#frame = cv2.imread("a.jpg")
 
 
 ####---------------------- CALIBRATION ---------------------------
@@ -57,9 +65,11 @@ for fname in images:
 ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1],None,None)
 '''
 ###------------------ ARUCO TRACKER ---------------------------
-while (True):
-
+for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
     # operations on the frame
+    rawCapture.truncate(0)
+    rawCapture.seek(0)
+    frame = frame.array
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     # set dictionary size depending on the aruco marker selected
@@ -102,10 +112,11 @@ while (True):
 
     else:
         # code to show 'No Ids' when no markers are found
+        print("no Ids")
         cv2.putText(frame, "No Ids", (0,64), font, 1, (0,255,0),2,cv2.LINE_AA)
 
     # display the resulting frame
-    frame = cv2.resize(frame, (960, 540))                    # Resize image
+    frame = cv2.resize(frame, (640, 480))                    # Resize image
     cv2.imshow('frame',frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
