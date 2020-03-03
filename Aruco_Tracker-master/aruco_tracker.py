@@ -25,7 +25,15 @@ imgpoints = [] # 2d points in image plane.
 # iterating through all calibration images
 # in the folder
 images = glob.glob('calib_images/*.jpg')
+# File storage in OpenCV
+cv_file = cv2.FileStorage("calib_images/test.yaml", cv2.FILE_STORAGE_READ)
 
+# Note : we also have to specify the type
+# to retrieve otherwise we only get a 'None'
+# FileNode object back instead of a matrix
+camera_matrix = cv_file.getNode("camera_matrix").mat()
+dist_matrix = cv_file.getNode("dist_coeff").mat()
+'''
 for fname in images:
     img = cv2.imread(fname)
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
@@ -47,7 +55,7 @@ for fname in images:
 
 
 ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1],None,None)
-
+'''
 ###------------------ ARUCO TRACKER ---------------------------
 while (True):
 
