@@ -10,7 +10,7 @@ import time
 #cap = cv2.VideoCapture(0)
 camera =PiCamera()
 camera.resolution=(640,480)
-camera.framerate = 5
+camera.framerate = 30
 rawCapture = PiRGBArray(camera, size=(640,480))
 time.sleep(0.1)
 
@@ -97,7 +97,13 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         for i in range(0, ids.size):
             # draw axis for the aruco markers
             aruco.drawAxis(frame, mtx, dist, rvec[i], tvec[i], 0.1)
-
+            nptvec = np.array(tvec[i])
+            if ids[i] == 2 and nptvec[0,2]<2:
+                print("RED !!!!!!!")
+#            print("Vecteur de rotation :")
+#            print(rvec[i])
+#            print("Vecteur de translation :")
+#            print(tvec[i])
         # draw a square around the markers
         aruco.drawDetectedMarkers(frame, corners)
 
@@ -108,11 +114,11 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
             strg += str(ids[i][0])+', '
 
         cv2.putText(frame, "Id: " + strg, (0,64), font, 1, (0,255,0),2,cv2.LINE_AA)
-        print(str(ids[i][0]))
+#        print(str(ids[i][0]))
 
     else:
         # code to show 'No Ids' when no markers are found
-        print("no Ids")
+#        print("no Ids")
         cv2.putText(frame, "No Ids", (0,64), font, 1, (0,255,0),2,cv2.LINE_AA)
 
     # display the resulting frame
