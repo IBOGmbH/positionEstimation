@@ -20,14 +20,15 @@
 
 4. **aruco_tracker.py** : Extracts pose of multiple aruco markers from a webcam stream.
 
-## Specific usecase : 
-The first step is to take calibration pictures. 
+## Specific use case : 
+
+* The first step is to take calibration pictures. 
 This is done with the calibration_images/taking_pictures.sh (please delete the images before ), the checker is also included in the folder "images".
 Ths script will take 25 picutes at 1.5 second interval, move the camera in random different positions (the chessboard needs to always be visible).
 
-Once the pictures are taken, the script camera_calibration.py needs to be launched.
+* Once the pictures are taken, the script camera_calibration.py needs to be launched (it will take some time).
 
-Now the aruco_tracker.py can be launched. 
+* Now the aruco_tracker.py can be launched. 
 There is a flag for having or not a GUI at the beginning of the file. 
 It's adviced to print the values of the tvecs to get an idea of where the threshold should be.
 
